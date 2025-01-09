@@ -30,9 +30,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  peiList:
-                    $ref: '#/w8mr9mgi6i0hx1d/schema_property/rsldqcfgj1o0s'
               examples:
                 Example 1:
                   value:
