@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: MaPS-Peis
+  description: This service allows a client to peis from the PDP Ecosystem for a pension owner session.
+  termsOfService: 'https://maps.org.uk/en/about-us/terms-and-conditions#'
+  contact:
+    name: General Enquires
+    url: 'https://maps.org.uk/en/about-us/contact-us'
+    email: contact@maps.org.uk
+  license:
+    url: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+    name: Government API License
+servers:
+  - url: 'http://localhost:3000'
+    description: LocalTest
+paths:
+  /peis:
+    get:
+      tags:
+        - PeI Data
+      summary: Your GET endpoint
+      description: Retreive the peis from the PDP Ecosystem for a pension owner.
+      operationId: get-peis-for-pension-owner-session
+      parameters:
+        - name: iss
+          in: header
+          description: The id of the requesting system issued by the CDA
+          required: true
+          schema:
+            type: string
+            minLength: 1
+        - name: userSessionId
+          in: header
+          description: The unique id of pension owner session as issued by the requesting system
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: rpt
+          in: header
+          description: The RPT for the current user session
+          schema:
+            type: string
+            pattern: '^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)'
+        - name: peisId
+          in: header
+          description: The unique identifier for a collection of peis related to a user session
+          required: true
+          schema:
+            type: string
+            pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+            minLength: 36
+            maxLength: 36
+        - $ref: '#/components/parameters/mhpdCorrelationId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/eIData'
+          headers:
+            rpt:
+              schema:
+                type: string
+                pattern: '^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)'
+              description: The RTP for the user sessio
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      servers:
+        - url: 'http://localhost:3000'
+          description: LocalTest
+tags:
+  - name: PeI Data
+    description: Retrieved PeI data
+components:
+  parameters:
+    mhpdCorrelationId:
+      name: mhpdCorrelationId
+      in: header
+      description: Id to track the progress of a process throughout the the mhpd application
+      required: false
+      schema:
+        type: string
+        format: uuid
+        pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+        minLength: 36
+        maxLength: 36
+  schemas:
+    eIData:
+      type: object
+      title: eIData
+      description: Data for a retrieved PeI
+      properties:
+        pei:
+          type: string
+          description: "The PeI. \_\n\nThis must be two 36 character GUIDs separated by a colon.\n\nThe first GUID is a holder-name GUID which is a unique identifier for the holder of the pensions data as known to the CDA\n\nThe second GUID is a unique identifier for the pensions data as known by the resource holder."
+          pattern: '^(?:\{{0,1}(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}?:\{{0,1}(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1})$'
+          minLength: 73
+          maxLength: 73
+        description:
+          type: string
+          description: |-
+            The human readable description of the title of the pension scheme that the asset is associated with.
+            Typically the scheme name
+          minLength: 1
+          maxLength: 150
+        retrievalStatus:
+          type: string
+          enum:
+            - NEW
+            - RETRIEVAL_REQUESTED
+            - RETRIEVAL_COMPLETE
+            - RETRIEVAL_FAILED
+          description: |-
+            The current status of the retrieval of the pension arrangement data associated identified by the PeI.
+            - `NEW` - retrieval of the associated pension data has not be requested
+            - `RETRIEVAL_REQUESTED` - retrieval of the associated pension data has not be requested
+            - `RETRIEVAL_COMPLETE` - the retrieval of the pension data for the has been completed. Albeit that the data may not all be available
+            - `RETRIEVAL_FAILED` - the retrieval of the pension data failed and will not be retried until later.
+        retrievalRequestedTimestamp:
+          type: string
+          description: The utc millisecond timestamp for the last time that a request was made to retrieve the pension arrangement data associated identified by the PeI.
+          format: date-time
+          minLength: 23
+          maxLength: 23
+      required:
+        - pei
+        - description
+        - retrievalStatus

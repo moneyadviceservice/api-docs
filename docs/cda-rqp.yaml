@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: mapsCdaRqp
+  description: |-
+    This API describes service that provides RQP tokens for clients interacting with CDA components.
+    A new RQP is required for each interaction with CDA.
+    By default tokens are valid for 60 seconds.
+  termsOfService: 'https://maps.org.uk/en/about-us/terms-and-conditions#'
+  contact:
+    name: General Enquires
+    url: 'https://maps.org.uk/en/about-us/contact-us'
+    email: contact@maps.org.uk
+  license:
+    url: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+    name: Government API License
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /rqps:
+    post:
+      tags:
+        - CDA Rqp
+      summary: Create RQP Token
+      description: Create a new RQP token valid for the passed iss and userSession
+      operationId: create-rqp
+      parameters:
+        - $ref: '#/components/parameters/mhpdCorrelationId'
+      requestBody:
+        $ref: '#/components/requestBodies/rqpRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/createRqpRequestResponse'
+        '400':
+          description: Missing Required Information
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      security:
+        - bearerToken: []
+      servers:
+        - url: 'http://localhost:3000'
+tags:
+  - name: CDA Rqp
+    description: CDA RQP Token creation
+components:
+  parameters:
+    mhpdCorrelationId:
+      name: mhpdCorrelationId
+      in: header
+      description: Id to track the progress of a process throughout the the mhpd application
+      required: false
+      schema:
+        type: string
+        format: uuid
+        pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+        minLength: 36
+        maxLength: 36
+  requestBodies:
+    rqpRequest:
+      description: The information that must be supplied by an API client in order to create a valid RQP for a user session in the client.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              iss:
+                type: string
+                description: The id of the requesting system issued by the CDA.
+                minLength: 1
+                maxLength: 200
+              userSessonId:
+                type: string
+                description: The unique id of pension owner session as issued by the requesting system
+                minLength: 1
+                maxLength: 200
+            required:
+              - iss
+              - userSessonId
+          examples:
+            Example 1:
+              value:
+                redirectPurpose: FIND
+                iss: myapp.com
+                userSessonId: ff2bba91-1867-4ff5-be4c-534ad527a59f
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+  responses:
+    createRqpRequestResponse:
+      description: |-
+        Example response
+        {
+          "rqp": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjJ9.tbDepxpstvGdW8TC3G8zg4B6rUYAOvfzdceoH48wgRQ"
+        }
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              rqp:
+                type: string
+                description: The RQP token (JWT) that contains the claims that will be used by the CDA.
+                pattern: '^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)'
+            required:
+              - rqp
+          examples:
+            Example 1:
+              value:
+                rqp: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2Mzh9.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI
