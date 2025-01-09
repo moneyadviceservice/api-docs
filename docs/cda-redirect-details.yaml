@@ -1,0 +1,185 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: mapsCdaRedirectDetails
+  description: ''
+  termsOfService: 'https://maps.org.uk/en/about-us/terms-and-conditions#'
+  contact:
+    name: General Enquires
+    url: 'https://maps.org.uk/en/about-us/contact-us'
+    email: contact@maps.org.uk
+  license:
+    url: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
+    name: Government API License
+servers:
+  - url: 'http://localhost:3000'
+    description: LocalTest
+paths:
+  /redirect-details:
+    post:
+      tags:
+        - CDA Redirect
+      summary: Create CDA Redirect Details
+      description: Generates and returns the details required when redirecting to the CDA.
+      operationId: create-details-for-a-cda-redirect
+      parameters:
+        - $ref: '#/components/parameters/mhpdCorrelationId'
+      requestBody:
+        $ref: '#/components/requestBodies/redirectDetailsRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/redirectDetailsSuccess'
+        '400':
+          description: Missing Required Information
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
+      security:
+        - bearerToken: []
+      servers:
+        - url: 'http://localhost:3000'
+          description: LocalTest
+tags:
+  - name: CDA Redirect
+    description: CDA Redirect Details Retrieval
+components:
+  parameters:
+    mhpdCorrelationId:
+      name: mhpdCorrelationId
+      in: header
+      description: Id to track the progress of a process throughout the the mhpd application
+      required: false
+      schema:
+        type: string
+        format: uuid
+        pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+        minLength: 36
+        maxLength: 36
+  requestBodies:
+    redirectDetailsRequest:
+      description: The information that must be supplied by an API client in order to determine valid cda redirect details
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              redirectPurpose:
+                description: The purpose of the redirect to the CDA.
+              iss:
+                type: string
+                description: The id of the requesting system issued by the CDA.
+                minLength: 1
+                maxLength: 200
+              userSessonId:
+                type: string
+                description: The unique id of pension owner session as issued by the requesting system
+                minLength: 1
+            required:
+              - redirectPurpose
+              - iss
+              - userSessonId
+          examples:
+            Example 1:
+              value:
+                redirectPurpose: FIND
+                iss: myapp.com
+                userSessonId: ff2bba91-1867-4ff5-be4c-534ad527a59f
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+  responses:
+    redirectDetailsSuccess:
+      description: |
+        The generated redirect details.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              requestID:
+                type: string
+                description: |2-
+                   A unique id supplied by the MHPD services that can be used to pass to the CDA so that the entire route of the redirect can be easily tracked.
+                   This should be set as the request_id query parameter in the redirect request sent to the CDA.
+                format: uuid
+              rqp:
+                type: string
+                description: |-
+                  The RQP token required by for the redirect request.
+                  This should be set as the rqp_token query parameter in the redirect request sent to the CDA.
+                pattern: '^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$'
+              scope:
+                description: This should be set as the scope query parameter in the redirect request sent to the CDA.
+              responseType:
+                description: The response_type to be sent as a query parameter in the redirect request to the CDA
+              prompt:
+                description: This should be set as the prompt query parameter in the redirect request sent to the CDA.
+              service:
+                description: This should be set as the service query parameter in the redirect request sent to the CDA.
+              codeChallengeMethod:
+                description: This should be set as the code_challenge_method query parameter in the redirect request sent to the CDA.
+              codeChallenge:
+                type: string
+                description: This should be set as the code_challenge query parameter in the redirect request sent to the CDA.
+                pattern: '^[a-zA-Z0-9\-\.\_\~]{43,128}$'
+                minLength: 43
+                maxLength: 128
+              code_verifier:
+                type: string
+                description: |-
+                  The code verifier used to generate the code challenge.
+                  This should be stored by the client and used in subsequent calls to the CDA.
+                pattern: '^[a-zA-Z0-9\-\.\_\~]{43,128}$'
+                minLength: 43
+                maxLength: 128
+              redirectTargetUrl:
+                type: string
+                description: The cda url that the user should be redirected to
+                format: uri
+            required:
+              - requestID
+              - rqp
+              - scope
+              - responseType
+              - prompt
+              - service
+              - codeChallengeMethod
+              - codeChallenge
+              - code_verifier
+              - redirectTargetUrl
+          examples:
+            Example 1:
+              value:
+                requestID: e4619679-f5d9-4eff-9f79-bbded6130bb1
+                rqp: eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+                scope: openid pdp
+                responseType: code
+                prompt: login
+                service: PDPPensionFinder
+                codeChallengeMethod: S256
+                codeChallenge: j3wKnK2Fa_mc2tgdqa6GtUfCYjdWSA5S23JKTTtPF8Y
+                clientId: dashboard_cda_client_id
+                code_verifier: 7189b64cc5f65b805baf201e384dc53ae7d18305d5ebb6170ad557b6
+                redirectTargetUrl: 'https://cdaEmulator/'
+      headers:
+        mhpdCorrelationId:
+          schema:
+            type: string
+            format: uuid
+            pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+            minLength: 36
+            maxLength: 36
+            example: e50cb5e0-f4db-4187-b970-e89e42ebea16
+          description: Id to track the progress of a process throughout the the mhpd application
+security:
+  - bearerToken: []
