@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  version: '1.0'
+  title: Cda-Pei-Retrieval-Details
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /pei-retrieval-details:
+    post:
+      summary: Retrieve PeisId
+      operationId: post-pei-retrieval-details
+      parameters:
+        - $ref: '#/components/parameters/mhpdCorrelationId'
+      requestBody:
+        $ref: '#/components/requestBodies/peiRetrievalDetailsRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/peiRetrievalDetailsResponse'
+      servers:
+        - url: 'http://localhost:3000'
+components:
+  parameters:
+    mhpdCorrelationId:
+      name: mhpdCorrelationId
+      in: header
+      description: Id to track the progress of a process throughout the the mhpd application
+      required: false
+      schema:
+        type: string
+        format: uuid
+        pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+        minLength: 36
+        maxLength: 36
+        examples:
+          - e50cb5e0-f4db-4187-b970-e89e42ebea16
+  requestBodies:
+    peiRetrievalDetailsRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              clientId:
+                $ref: '#/uwq32nsttcr10p7/schema_property/im5jmiyl84bah'
+                examples:
+                  - dashboard_unique_id
+              authorisationCode:
+                type: string
+                description: The authorisation code provided by the CDA in the FIND redirect unwind
+                minLength: 1
+              redirectUrI:
+                type: string
+                description: The return redirect URI provided to the CDA when the pension owner is directed to the CDA find url
+                format: uri
+                examples:
+                  - 'https://my_company.com/dashboard/returned_find'
+              codeVerifier:
+                type: string
+                description: The code verifier for the code challenge provided to the CDA when the pension owner is directed to the CDA find url
+                pattern: '^[a-zA-Z0-9\-\.\_\~]{43,128}$'
+                minLength: 43
+                maxLength: 128
+                examples:
+                  - 7189b64cc5f65b805baf201e384dc53ae7d18305d5ebb6170ad557b6
+              clientSecret:
+                $ref: '#/uwq32nsttcr10p7/schema_property/0bg8nas3dd1gf'
+                examples:
+                  - my_secret
+            required:
+              - authorisationCode
+              - redirectUrI
+              - codeVerifier
+          examples:
+            Example 1:
+              value:
+                clientId: dashboard_unique_id
+                authorisationCode: string
+                redirectUrI: 'https://my_company.com/dashboard/returned_find'
+                codeVerifier: 7189b64cc5f65b805baf201e384dc53ae7d18305d5ebb6170ad557b6
+                clientSecret: my_secret
+  responses:
+    peiRetrievalDetailsResponse:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              peisId:
+                type: string
+                description: identifier that can be used to retrieve the registered pei information for the user and a particular scope
+                format: uuid
+                minLength: 36
+                maxLength: 36
+            required:
+              - peisId
+          examples:
+            Example 1:
+              value:
+                peisId: 22c47c98-ade8-4c3d-8e78-39259cdcd57b
+      headers:
+        mhpdCorrelationId:
+          schema:
+            type: string
+            format: uuid
+            pattern: '^(?:[0-9a-fA-F]){8}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){4}-(?:[0-9a-fA-F]){12}\}{0,1}$'
+            minLength: 36
+            maxLength: 36
+            example: e50cb5e0-f4db-4187-b970-e89e42ebea16
+          description: Id to track the progress of a process throughout the the mhpd application
