@@ -75,15 +75,6 @@
         "description": "Deletes the given pension retrieval record id.",
         "operationId": "delete-pensions-retrieval-records-id",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The id of pension retrieval record to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
         ],
         "responses": {
           "204": {
@@ -96,5 +87,5 @@
       }
     }
   },
-  "components": { }
+  "components": {}
 }
