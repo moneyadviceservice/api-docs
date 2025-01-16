@@ -69,31 +69,34 @@
             "description": "Gateway Timeout"
           }
         }
-      },
-      "delete": {
-        "summary": "Delete Pensions Retrieved Record",
-        "description": "Deletes the given pension retrieved record id.",
-        "operationId": "delete-pensions-retrieved-records-id",
-        "parameters": [
-          {
-            "name": "id",
-            "description": "The id of pension retrieved record to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
+      }
+    },
+    "/retrieved-pension-records/{id}": {
+        "delete": {
+          "summary": "Delete Pensions Retrieved Record",
+          "description": "Deletes the given pension retrieved record id.",
+          "operationId": "delete-pensions-retrieved-records-id",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The id of pension retrieved record to be deleted",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "404": {
+              "description": "Not Found"
+            }
           }
         }
       }
-    }
   },
   "components": { }
 }
