@@ -69,7 +69,9 @@
             "description": "Gateway Timeout"
           }
         }
-      },
+      }
+    },
+    "/pensions-retrieval-records{id}": {
       "delete": {
         "summary": "Delete Pensions Retrieval Record",
         "description": "Deletes the given pension retrieval record id.",
@@ -77,6 +79,7 @@
         "parameters": [
           {
             "name": "id",
+            "in": "path",
             "description": "The id of pension retrieval record to be deleted",
             "required": true,
             "schema": {
