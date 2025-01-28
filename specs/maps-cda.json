@@ -1,0 +1,147 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MaPSCDAService",
+    "version": "1.0"
+  },
+  "paths": {
+    "/rqp": {
+      "post": {
+        "tags": [
+          "MapsCdaService"
+        ],
+        "parameters": [
+          {
+            "name": "headerModel",
+            "in": "header",
+            "schema": {
+              "$ref": "#/components/schemas/RequestHeaderModel"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RPQRequestModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RPQRequestModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RPQRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/redirect-details": {
+      "post": {
+        "tags": [
+          "MapsCdaService"
+        ],
+        "parameters": [
+          {
+            "name": "headerModel",
+            "in": "header",
+            "schema": {
+              "$ref": "#/components/schemas/RequestHeaderModel"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedirectRequestPayload"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedirectRequestPayload"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedirectRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RPQRequestModel": {
+        "type": "object",
+        "properties": {
+          "iss": {
+            "type": "string",
+            "nullable": true
+          },
+          "userSessionId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RedirectRequestPayload": {
+        "type": "object",
+        "properties": {
+          "redirectPurpose": {
+            "type": "string",
+            "nullable": true
+          },
+          "iss": {
+            "type": "string",
+            "nullable": true
+          },
+          "userSessionId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestHeaderModel": {
+        "type": "object",
+        "properties": {
+          "xRequestId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userSessionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "iss": {
+            "type": "string",
+            "nullable": true
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
