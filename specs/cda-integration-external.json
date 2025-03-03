@@ -8,7 +8,7 @@
     "/token": {
       "post": {
         "tags": [
-          "testestesttestesttest"
+          "test"
         ],
         "parameters": [
           {
