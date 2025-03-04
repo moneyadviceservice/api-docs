@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "PeiIntegrationService",
+    "title": "PeiIntegrationService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "version": "1.0"
   },
   "paths": {
@@ -10,28 +10,18 @@
         "tags": [
           "PeI"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PeiIntegrationServiceRequestModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PeiIntegrationServiceRequestModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PeiIntegrationServiceRequestModel"
-              }
+        "parameters": [
+          {
+            "name": "requestModel",
+            "in": "header",
+            "schema": {
+              "$ref": "#/components/schemas/PeiIntegrationServiceRequestModel"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "OK"
           }
         }
       }
@@ -42,11 +32,23 @@
       "PeiIntegrationServiceRequestModel": {
         "type": "object",
         "properties": {
-          "requestId": {
+          "rpt": {
+            "type": "string",
+            "nullable": true
+          },
+          "iss": {
+            "type": "string",
+            "nullable": true
+          },
+          "userSessionId": {
             "type": "string",
             "nullable": true
           },
           "peisId": {
+            "type": "string",
+            "nullable": true
+          },
+          "correlationId": {
             "type": "string",
             "nullable": true
           }
