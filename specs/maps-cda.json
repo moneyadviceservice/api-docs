@@ -8,7 +8,7 @@
     "/claims-gathering-redirect": {
       "get": {
         "tags": [
-          "ClaimsRedirect", "test"
+          "ClaimsRedirect"
         ],
         "parameters": [
           {
