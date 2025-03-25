@@ -20,6 +20,26 @@
     }
   ],
   "paths": {
+    "/GetItem": {
+      "get": {
+        "tags": [
+          "items", "test"
+        ],
+        "operationId": "GetItem",
+        "responses": {
+          "200": {
+            "description": "Payload of String",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pensions-retrieval-records": {
       "get": {
         "summary": "Get Pensions Retrieval Record",
@@ -69,9 +89,7 @@
             "description": "Gateway Timeout"
           }
         }
-      }
-    },
-    "/pensions-retrieval-records{id}": {
+      },
       "delete": {
         "summary": "Delete Pensions Retrieval Record",
         "description": "Deletes the given pension retrieval record id.",
