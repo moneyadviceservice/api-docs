@@ -8,7 +8,7 @@
     "/pensions-data": {
       "get": {
         "tags": [
-          "PensionsData"
+          "PensionsData", "force"
         ],
         "parameters": [
           {
