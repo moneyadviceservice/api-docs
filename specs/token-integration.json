@@ -8,7 +8,7 @@
     "/rpts": {
       "post": {
         "tags": [
-          "Token"
+          "Token", "force"
         ],
         "parameters": [
           {
