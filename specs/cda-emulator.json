@@ -15,7 +15,7 @@
             "name": "X-Request-ID",
             "in": "header",
             "schema": {
-              "type": "string", "force"
+              "type": "string"
             }
           }
         ],
