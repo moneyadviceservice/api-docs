@@ -12,7 +12,7 @@
         ],
         "parameters": [
           {
-            "name": "X-Request-ID",, "test"
+            "name": "X-Request-ID",
             "in": "header",
             "schema": {
               "type": "string"
