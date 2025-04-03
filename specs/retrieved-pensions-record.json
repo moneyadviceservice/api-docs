@@ -23,7 +23,7 @@
     "/GetItem": {
       "get": {
         "tags": [
-          "items", "test"
+          "items"
         ],
         "operationId": "GetItem",
         "responses": {
