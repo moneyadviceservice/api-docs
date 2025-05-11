@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "CDAServiceEmulator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "version": "1.0"
@@ -26,36 +26,53 @@
                 "type": "object",
                 "properties": {
                   "grant_type": {
+                    "pattern": "^(urn:ietf:params:oauth:grant-type:uma-ticket|authorization_code)$",
                     "type": "string"
                   },
                   "ticket": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){4}$",
                     "type": "string"
                   },
                   "claim_token": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
                     "type": "string"
                   },
                   "claim_token_format": {
-                    "type": "string"
+                    "enum": [
+                      "pension_dashboard_rqp"
+                    ],
+                    "type": "string",
+                    "description": " (Constant value: pension_dashboard_rqp)"
                   },
                   "scope": {
-                    "type": "string"
+                    "enum": [
+                      "owner"
+                    ],
+                    "type": "string",
+                    "description": " (Constant value: owner)"
                   },
                   "client_id": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "client_secret": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "code": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "redirect_uri": {
+                    "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
                     "type": "string"
                   },
                   "code_verifier": {
+                    "minLength": 1,
                     "type": "string"
                   },
                   "pct": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
                     "type": "string"
                   }
                 }
@@ -115,6 +132,7 @@
             "name": "client_id",
             "in": "query",
             "schema": {
+              "minLength": 1,
               "type": "string"
             }
           },
@@ -122,6 +140,7 @@
             "name": "ticket",
             "in": "query",
             "schema": {
+              "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){4}$",
               "type": "string"
             }
           },
@@ -129,6 +148,7 @@
             "name": "claims_redirect_uri",
             "in": "query",
             "schema": {
+              "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
               "type": "string"
             }
           },
@@ -136,6 +156,7 @@
             "name": "rqp_token",
             "in": "query",
             "schema": {
+              "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
               "type": "string"
             }
           },
@@ -143,14 +164,20 @@
             "name": "request_id",
             "in": "query",
             "schema": {
+              "minLength": 1,
               "type": "string"
             }
           },
           {
             "name": "state",
             "in": "query",
+            "description": " (Constant value: FIND)",
             "schema": {
-              "type": "string"
+              "enum": [
+                "FIND"
+              ],
+              "type": "string",
+              "description": " (Constant value: FIND)"
             }
           }
         ],
@@ -170,14 +197,18 @@
           {
             "name": "holdernameGuid",
             "in": "query",
+            "required": true,
             "schema": {
+              "pattern": "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
               "type": "string"
             }
           },
           {
             "name": "X-Request-ID",
             "in": "header",
+            "required": true,
             "schema": {
+              "pattern": "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
               "type": "string"
             }
           }
