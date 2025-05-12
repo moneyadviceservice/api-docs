@@ -1,269 +1,430 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-        "title": "cda-integration-external",
-        "description": "This API describes service that provides RQP tokens for clients interacting with CDA components.",
-        "version": "1.0"
-    },
-    "servers": [
-        {
-            "url": "https://maps-api-management-dev.azure-api.net/cda-integration-external"
+  "openapi": "3.0.1",
+  "info": {
+    "title": "cda-integration-external",
+    "description": "This API describes service that provides RQP tokens for clients interacting with CDA components.",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://maps-api-management-dev.azure-api.net/cda-integration-external"
+    }
+  ],
+  "paths": {
+    "/token": {
+      "post": {
+        "tags": [
+          "CdaToken"
+        ],
+        "parameters": [
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "pattern": "^(urn:ietf:params:oauth:grant-type:uma-ticket|authorization_code)$",
+                    "type": "string"
+                  },
+                  "ticket": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){4}$",
+                    "type": "string"
+                  },
+                  "claim_token": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
+                    "type": "string"
+                  },
+                  "claim_token_format": {
+                    "enum": [
+                      "pension_dashboard_rqp"
+                    ],
+                    "type": "string",
+                    "description": " (Constant value: pension_dashboard_rqp)"
+                  },
+                  "scope": {
+                    "enum": [
+                      "owner"
+                    ],
+                    "type": "string",
+                    "description": " (Constant value: owner)"
+                  },
+                  "client_id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "client_secret": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "code": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "redirect_uri": {
+                    "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
+                    "type": "string"
+                  },
+                  "code_verifier": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "pct": {
+                    "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "grant_type": {
+                  "style": "form"
+                },
+                "ticket": {
+                  "style": "form"
+                },
+                "claim_token": {
+                  "style": "form"
+                },
+                "claim_token_format": {
+                  "style": "form"
+                },
+                "scope": {
+                  "style": "form"
+                },
+                "client_id": {
+                  "style": "form"
+                },
+                "client_secret": {
+                  "style": "form"
+                },
+                "code": {
+                  "style": "form"
+                },
+                "redirect_uri": {
+                  "style": "form"
+                },
+                "code_verifier": {
+                  "style": "form"
+                },
+                "pct": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
-    ],
-    "paths": {
-        "/token": {
-            "post": {
-                "tags": [
-                    "CdaToken"
-                ],
-                "summary": "/token - POST",
-                "operationId": "post-token",
-                "parameters": [
-                    {
-                        "name": "grant_type",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "ticket",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "claim_token",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "claim_token_format",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "scope",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "client_id",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "client_secret",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "code",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "redirect_uri",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "code_verifier",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "X-Request-ID",
-                        "in": "header",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                }
-            }
-        },
-        "/holdername-view-configurations": {
-            "get": {
-                "tags": [
-                    "HolderName"
-                ],
-                "summary": "/holdername-view-configurations - GET",
-                "operationId": "get-holdername-view-configurations",
-                "parameters": [
-                    {
-                        "name": "holdername_guid",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "X-Request-ID",
-                        "in": "header",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                }
-            }
-        },
-        "/jwk_uri": {
-            "get": {
-                "tags": [
-                    "JwkUri"
-                ],
-                "summary": "/jwk_uri - GET",
-                "operationId": "get-jwk_uri",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                }
-            }
-        },
-        "/peis/{peis_id}": {
-            "get": {
-                "tags": [
-                    "Peis"
-                ],
-                "summary": "/peis/{peis_id} - GET",
-                "operationId": "get-peis-peis_id",
-                "parameters": [
-                    {
-                        "name": "peis_id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "X-Request-ID",
-                        "in": "header",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                }
-            }
-        },
-        "/claims_gathering": {
-            "get": {
-                "tags": [
-                    "ClaimsGathering"
-                ],
-                "summary": "/claims_gathering",
-                "operationId": "claims-gathering",
-                "parameters": [
-                    {
-                        "name": "client_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "request_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "state",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "claims_redirect_uri",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "rqp_token",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "ticket",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        }
+      }
     },
-    "components": {
-        "securitySchemes": {
-            "apiKeyHeader": {
-                "type": "apiKey",
-                "name": "Ocp-Apim-Subscription-Key",
-                "in": "header"
+    "/claims_gathering": {
+      "get": {
+        "tags": [
+          "ClaimsGathering"
+        ],
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "ticket",
+            "in": "query",
+            "schema": {
+              "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){4}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "claims_redirect_uri",
+            "in": "query",
+            "schema": {
+              "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rqp_token",
+            "in": "query",
+            "schema": {
+              "pattern": "^[A-Za-z0-9\\-_]+(\\.[A-Za-z0-9\\-_]+){2}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "request_id",
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "description": " (Constant value: FIND)",
+            "schema": {
+              "enum": [
+                "FIND"
+              ],
+              "type": "string",
+              "description": " (Constant value: FIND)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/holdername-view-configurations": {
+      "get": {
+        "tags": [
+          "HolderName"
+        ],
+        "parameters": [
+          {
+            "name": "holdernameGuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "pattern": "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/jwk_uri": {
+      "get": {
+        "tags": [
+          "JwkUri"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/peis/{peis_id}": {
+      "get": {
+        "tags": [
+          "Peis"
+        ],
+        "parameters": [
+          {
+            "name": "peis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-ID",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scenarios/{scenarioCode}": {
+      "get": {
+        "tags": [
+          "Scenario"
+        ],
+        "parameters": [
+          {
+            "name": "scenarioCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "tags": [
+          "Scenario"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Scenario"
+        ],
+        "parameters": [
+          {
+            "name": "scenarioCode",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+              }
             },
-            "apiKeyQuery": {
-                "type": "apiKey",
-                "name": "subscription-key",
-                "in": "query"
+            "text/json": {
+              "schema": {
+              }
+            },
+            "application/*+json": {
+              "schema": {
+              }
             }
-        }
-    },
-    "security": [
-        {
-            "apiKeyHeader": []
+          }
         },
-        {
-            "apiKeyQuery": []
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
-    ]
+      },
+      "delete": {
+        "tags": [
+          "Scenario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scenarios/validate": {
+      "post": {
+        "tags": [
+          "Scenario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+              }
+            },
+            "text/json": {
+              "schema": {
+              }
+            },
+            "application/*+json": {
+              "schema": {
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "apiKey",
+        "name": "Ocp-Apim-Subscription-Key",
+        "in": "header"
+      },
+      "apiKeyQuery": {
+        "type": "apiKey",
+        "name": "subscription-key",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKeyHeader": [
+      ]
+    },
+    {
+      "apiKeyQuery": [
+      ]
+    }
+  ]
 }
