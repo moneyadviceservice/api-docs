@@ -4,6 +4,11 @@
     "title": "MaPSCDAService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
     "version": "1.0"
   },
+  "servers": [
+    {
+      "url": "https://maps-api-management-dev.azure-api.net/maps-cda-service/"
+    }
+  ],
   "paths": {
     "/claims-gathering-redirect": {
       "get": {
@@ -141,6 +146,24 @@
           }
         }
       }
+    },
+    "/csrf-token": {
+      "get": {
+        "summary": "Get CSRF token",
+        "description": "Returns a CSRF token and sets it as an HttpOnly cookie.",
+        "responses": {
+          "200": {
+            "description": "CSRF token set",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -149,7 +172,7 @@
         "type": "object",
         "properties": {
           "redirectTargetUrl": {
-            "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
+            "pattern": "^https?:\\/\\/((localhost)|([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})(:\\d{1,5})?(\\/[^\\s]*)?$",
             "type": "string",
             "nullable": true
           },
