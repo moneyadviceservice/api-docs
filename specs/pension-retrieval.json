@@ -22,9 +22,7 @@
   "paths": {
     "/GetItem": {
       "get": {
-        "tags": [
-          "items"
-        ],
+        "tags": ["items"],
         "operationId": "GetItem",
         "responses": {
           "200": {
@@ -89,7 +87,9 @@
             "description": "Gateway Timeout"
           }
         }
-      },
+      }
+    },
+    "/pensions-retrieval-records/{id}": {
       "delete": {
         "summary": "Delete Pensions Retrieval Record",
         "description": "Deletes the given pension retrieval record id.",
@@ -116,5 +116,5 @@
       }
     }
   },
-  "components": { }
+  "components": {}
 }
