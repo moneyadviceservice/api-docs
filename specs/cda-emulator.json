@@ -64,11 +64,11 @@
                     "type": "string"
                   },
                   "redirect_uri": {
-                    "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
+                    "pattern": "^https?:\\/\\/((localhost)|([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})(:\\d{1,5})?(\\/[^\\s]*)?$",
                     "type": "string"
                   },
                   "code_verifier": {
-                    "minLength": 1,
+                    "pattern": "^[a-zA-Z0-9\\-._~]{43,128}$",
                     "type": "string"
                   },
                   "pct": {
@@ -148,7 +148,7 @@
             "name": "claims_redirect_uri",
             "in": "query",
             "schema": {
-              "pattern": "^https?:\\/\\/([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}(:\\d{1,5})?(\\/[^\\s]*)?$",
+              "pattern": "^https?:\\/\\/((localhost)|([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})(:\\d{1,5})?(\\/[^\\s]*)?$",
               "type": "string"
             }
           },
