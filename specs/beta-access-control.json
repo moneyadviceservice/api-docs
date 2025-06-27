@@ -16,7 +16,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:7071"
+      "url": "https:\\localhost:7444"
     }
   ],
   "paths": {
@@ -39,27 +39,6 @@
         "responses": {
           "302": {
             "description": "The configured secure web platform attached to the link or an error page"
-          },
-          "400": {
-            "description": "BadRequest"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "502": {
-            "description": "BadGateway"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          },
-          "504": {
-            "description": "Gateway Timeout"
           }
         }
       }
@@ -87,23 +66,8 @@
           "400": {
             "description": "BadRequest"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "403": {
             "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          },
-          "502": {
-            "description": "BadGateway"
-          },
-          "503": {
-            "description": "Service Unavailable"
-          },
-          "504": {
-            "description": "Gateway Timeout"
           }
         }
       }
