@@ -37,8 +37,11 @@
           }
         ],
         "responses": {
-          "302": {
-            "description": "The configured secure web platform attached to the link or an error page"
+          "200": {
+            "description": "The link is valid"
+          },
+          "403": {
+            "description": "The link is expired or invalid"
           }
         }
       }
