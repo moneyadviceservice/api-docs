@@ -1,12 +1,54 @@
-openapi: 3.0.1
-info:
-  title: Health Probe API
-  version: 1.0
-paths:
-  /health-probe:
-    get:
-      summary: Health probe endpoint
-      description: Returns 200 OK for App Gateway health checks
-      responses:
-        '200':
-          description: OK
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Echo API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-apim-name.azure-api.net"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Simple health endpoint that always returns 200",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Healthy"
+          }
+        },
+        "x-ms-azure-api-management": {
+          "policies": [
+            {
+              "inbound": [
+                {
+                  "base": []
+                }
+              ],
+              "backend": [
+                {
+                  "return-response": {
+                    "status": 200,
+                    "description": "Healthy",
+                    "headers": {
+                      "Content-Type": "application/json"
+                    },
+                    "body": "{ \"status\": \"ok\" }"
+                  }
+                }
+              ],
+              "outbound": [
+                {
+                  "base": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
