@@ -299,5 +299,10 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Token"
+    }
+  ]
 }
