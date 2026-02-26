@@ -63,5 +63,10 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "PeI"
+    }
+  ]
 }
