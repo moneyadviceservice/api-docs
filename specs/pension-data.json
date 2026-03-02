@@ -400,10 +400,5 @@
         "additionalProperties": false
       }
     }
-  },
-  "tags": [
-    {
-      "name": "PensionsData"
-    }
-  ]
+  }
 }
