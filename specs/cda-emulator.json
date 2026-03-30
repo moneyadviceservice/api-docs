@@ -269,6 +269,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "raw",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
