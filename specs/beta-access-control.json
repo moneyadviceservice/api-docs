@@ -1,8 +1,8 @@
 {
-  "openapi": "3.0.1",
+  "swagger": "2.0",
   "info": {
-    "title": "Beta Access Control",
-    "description": "This service activates secure beta links and issues tokens that can be certified for validity",
+    "title": "MaPS Beta Access Control",
+    "description": "This service allows creation and verification of secure beta links for use on the MHPD",
     "contact": {
       "name": "General Enquires",
       "url": "https://maps.org.uk/en/about-us/contact-us",
@@ -11,63 +11,105 @@
     "license": {
       "name": "Government API License",
       "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-    },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "https:\\localhost:7444"
     }
+  },
+  "host": "localhost:7444",
+  "schemes": [
+    "http"
   ],
   "paths": {
-    "/activate": {
+    "/api/send-code": {
       "get": {
-        "summary": "Activates an issued link",
-        "description": "A link that is issued by the Link Generator function directs the user here to validate and then activate it.",
-        "operationId": "get-activate",
+        "tags": [
+          "BetaAccessFunction"
+        ],
+        "summary": "GET Send Code to participant. Code required for verification",
+        "description": "Sends a code to the participant via email that they can then use to verify the link belongs to them.",
+        "operationId": "get-send-code",
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "linkId",
             "in": "query",
-            "description": "The id of the secure link.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "name": "linkId",
+            "description": "The link id you would like to send the verification code for.",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "The link is valid"
+            "description": "OK"
           },
-          "403": {
-            "description": "The link is expired or invalid"
+          "400": {
+            "description": "Bad Request"
+          },
+          "429": {
+            "description": "Too Many Requests"
           }
         }
       }
     },
-    "/validate": {
+    "/api/verify-code": {
       "get": {
-        "summary": "Validates the specified token",
-        "description": "Validates the token issued by the activate endpoint.",
-        "operationId": "get-validate",
+        "tags": [
+          "BetaAccessFunction"
+        ],
+        "summary": "GET Verify Code from participant and issue token if valid",
+        "description": "Verifies the code against the one sent to the participant and issues a new token if valid.",
+        "operationId": "get-verify-code",
+        "produces": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "token",
-            "in": "header",
-            "description": "The jwt token to validate.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "in": "query",
+            "name": "linkId",
+            "description": "The link id you would like to verify the code for",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "code",
+            "description": "The code that was sent to the participants email by the send-code endpoint",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "The token is valid"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VerifyCodeResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/validate": {
+      "get": {
+        "tags": [
+          "BetaAccessFunction"
+        ],
+        "summary": "GET Validate existing token",
+        "description": "Validates an existing token to ensure its well formed and within the validation period",
+        "operationId": "get-validate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "description": "The token to validate",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
-            "description": "BadRequest"
+            "description": "Bad Request"
           },
           "403": {
             "description": "Forbidden"
@@ -76,5 +118,25 @@
       }
     }
   },
-  "components": { }
+  "definitions": {
+    "VerifyCodeResponse": {
+      "type": "object",
+      "properties": {
+        "responseCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "token": {
+          "type": "string",
+          "x-nullable": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "tags": [
+    {
+      "name": "BetaAccessFunction"
+    }
+  ]
 }
