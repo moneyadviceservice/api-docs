@@ -19,7 +19,7 @@
     "http"
   ],
   "paths": {
-    "/api/send-code": {
+    "/send-code": {
       "get": {
         "tags": [
           "BetaAccessFunction"
@@ -51,7 +51,7 @@
         }
       }
     },
-    "/api/verify-code": {
+    "/verify-code": {
       "get": {
         "tags": [
           "BetaAccessFunction"
@@ -86,7 +86,7 @@
         }
       }
     },
-    "/api/validate": {
+    "/validate": {
       "get": {
         "tags": [
           "BetaAccessFunction"
