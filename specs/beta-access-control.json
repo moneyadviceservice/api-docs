@@ -11,7 +11,8 @@
     "license": {
       "name": "Government API License",
       "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-    }
+    },
+    "version": "1.0"
   },
   "host": "localhost:7444",
   "schemes": [
