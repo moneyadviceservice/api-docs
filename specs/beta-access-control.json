@@ -120,6 +120,10 @@
     }
   },
   "definitions": {
+    "IActionResult": {
+      "type": "object",
+      "additionalProperties": false
+    },
     "VerifyCodeResponse": {
       "type": "object",
       "properties": {
