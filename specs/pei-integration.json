@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "PeiIntegrationService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "title": "PeiIntegrationService, Version=0.13.0.0, Culture=neutral, PublicKeyToken=null",
     "version": "1.0"
   },
   "paths": {
@@ -18,6 +18,18 @@
               "$ref": "#/components/schemas/PeiIntegrationServiceRequestModel"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/service/status": {
+      "get": {
+        "tags": [
+          "Status"
         ],
         "responses": {
           "200": {
@@ -67,6 +79,9 @@
   "tags": [
     {
       "name": "PeI"
+    },
+    {
+      "name": "Status"
     }
   ]
 }
