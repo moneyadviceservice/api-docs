@@ -19,6 +19,47 @@
     "http"
   ],
   "paths": {
+    "/questionnaire-submission": {
+      "post": {
+        "tags": [
+          "QuestionnaireSubmissionFunction"
+        ],
+        "summary": "Submit a completed participant questionnaire",
+        "description": "Dashboard backend only. Requires a server-held function key. Returns no token or cookie. No onboarding capacity check is performed.",
+        "operationId": "post-questionnaire-submission",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-functions-key",
+            "description": "Function key held by the dashboard backend.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QuestionnaireSubmission"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Questionnaire persisted. Empty response."
+          },
+          "403": {
+            "description": "Submission could not be validated or persisted. Empty response."
+          },
+          "401": {
+            "description": "Missing or invalid function key; rejected by the Functions host."
+          }
+        }
+      }
+    },
     "/send-code": {
       "get": {
         "tags": [
@@ -120,6 +161,41 @@
     }
   },
   "definitions": {
+    "QuestionnaireSubmission": {
+      "type": "object",
+      "required": [
+        "answers",
+        "consent",
+        "locale",
+        "personalDetails",
+        "questionnaireVersion"
+      ],
+      "properties": {
+        "locale": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "en",
+            "cy"
+          ]
+        },
+        "questionnaireVersion": {
+          "type": "string",
+          "description": "Nonblank version supplied by the dashboard and stored as submitted.",
+          "minLength": 1
+        },
+        "personalDetails": {
+          "$ref": "#/definitions/ParticipantPersonalDetails"
+        },
+        "answers": {
+          "$ref": "#/definitions/QuestionnaireAnswers"
+        },
+        "consent": {
+          "$ref": "#/definitions/ParticipantConsent"
+        }
+      },
+      "additionalProperties": false
+    },
     "IActionResult": {
       "type": "object",
       "additionalProperties": false
@@ -137,9 +213,138 @@
         }
       },
       "additionalProperties": false
+    },
+    "ParticipantConsent": {
+      "type": "object",
+      "required": [
+        "decision",
+        "timestamp",
+        "version"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "agreed"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "description": "Nonblank consent version supplied by the dashboard and stored as submitted.",
+          "minLength": 1
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "ISO-8601 UTC timestamp with Z or +00:00.",
+          "format": "date-time",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "ParticipantPersonalDetails": {
+      "type": "object",
+      "required": [
+        "emailAddress",
+        "firstName",
+        "lastName"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "emailAddress": {
+          "type": "string",
+          "format": "email",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "QuestionnaireAnswers": {
+      "type": "object",
+      "required": [
+        "ageRange",
+        "healthConditions",
+        "whereYouLive",
+        "yourSex"
+      ],
+      "properties": {
+        "ageRange": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "18-24",
+            "25-34",
+            "35-49",
+            "50-64",
+            "65-74",
+            "75+",
+            "prefer-not-to-say"
+          ]
+        },
+        "whereYouLive": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "england",
+            "scotland",
+            "wales",
+            "northern-ireland",
+            "not-in-uk",
+            "prefer-not-to-say"
+          ]
+        },
+        "yourSex": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "male",
+            "female",
+            "other",
+            "prefer-not-to-say"
+          ]
+        },
+        "otherSex": {
+          "type": "string",
+          "description": "Required and nonblank when yourSex is other; otherwise omit or use an empty string.",
+          "x-nullable": true
+        },
+        "healthConditions": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "yes",
+            "no",
+            "prefer-not-to-say"
+          ]
+        },
+        "healthConditionsImpact": {
+          "type": "string",
+          "description": "Required and nonempty when healthConditions is yes; otherwise omit or use an empty string.",
+          "enum": [
+            "",
+            "no",
+            "yes",
+            "yes-little",
+            "prefer-not-to-say"
+          ],
+          "x-nullable": true
+        }
+      },
+      "additionalProperties": false
     }
   },
   "tags": [
+    {
+      "name": "QuestionnaireSubmissionFunction"
+    },
     {
       "name": "BetaAccessFunction"
     }
