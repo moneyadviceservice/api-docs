@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "MaPS Beta Access Control",
-    "description": "This service allows creation and verification of secure beta links for use on the MHPD",
+    "description": "This service validates and stores completed MHPD participant questionnaires.",
     "contact": {
       "name": "General Enquires",
       "url": "https://maps.org.uk/en/about-us/contact-us",
@@ -51,110 +51,11 @@
           "200": {
             "description": "Questionnaire persisted. Empty response."
           },
-          "403": {
-            "description": "Submission could not be validated or persisted. Empty response."
-          },
           "401": {
             "description": "Missing or invalid function key; rejected by the Functions host."
-          }
-        }
-      }
-    },
-    "/send-code": {
-      "get": {
-        "tags": [
-          "BetaAccessFunction"
-        ],
-        "summary": "GET Send Code to participant. Code required for verification",
-        "description": "Sends a code to the participant via email that they can then use to verify the link belongs to them.",
-        "operationId": "get-send-code",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "linkId",
-            "description": "The link id you would like to send the verification code for.",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "429": {
-            "description": "Too Many Requests"
-          }
-        }
-      }
-    },
-    "/verify-code": {
-      "get": {
-        "tags": [
-          "BetaAccessFunction"
-        ],
-        "summary": "GET Verify Code from participant and issue token if valid",
-        "description": "Verifies the code against the one sent to the participant and issues a new token if valid.",
-        "operationId": "get-verify-code",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "linkId",
-            "description": "The link id you would like to verify the code for",
-            "type": "string"
-          },
-          {
-            "in": "query",
-            "name": "code",
-            "description": "The code that was sent to the participants email by the send-code endpoint",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/VerifyCodeResponse"
-            }
-          }
-        }
-      }
-    },
-    "/validate": {
-      "get": {
-        "tags": [
-          "BetaAccessFunction"
-        ],
-        "summary": "GET Validate existing token",
-        "description": "Validates an existing token to ensure its well formed and within the validation period",
-        "operationId": "get-validate",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "token",
-            "description": "The token to validate",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Submission could not be validated or persisted. Empty response."
           }
         }
       }
@@ -192,24 +93,6 @@
         },
         "consent": {
           "$ref": "#/definitions/ParticipantConsent"
-        }
-      },
-      "additionalProperties": false
-    },
-    "IActionResult": {
-      "type": "object",
-      "additionalProperties": false
-    },
-    "VerifyCodeResponse": {
-      "type": "object",
-      "properties": {
-        "responseCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "token": {
-          "type": "string",
-          "x-nullable": true
         }
       },
       "additionalProperties": false
@@ -344,9 +227,6 @@
   "tags": [
     {
       "name": "QuestionnaireSubmissionFunction"
-    },
-    {
-      "name": "BetaAccessFunction"
     }
   ]
 }
